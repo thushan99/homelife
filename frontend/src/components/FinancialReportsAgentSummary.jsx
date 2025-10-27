@@ -157,7 +157,7 @@ const FinancialReportsAgentPaymentSummary = () => {
               baseFee = parseFloat(eft.amount) * 0.05;
               break;
             case "plan8515":
-              baseFee = parseFloat(eft.amount) * 0.13;
+              baseFee = parseFloat(eft.amount) * 0.15;
               break;
             case "plan5050":
               baseFee = parseFloat(eft.amount) * 0.5;
@@ -180,13 +180,13 @@ const FinancialReportsAgentPaymentSummary = () => {
         const feesDeducted = parseFloat(
           agentCommission?.totalFees || calculatedFees
         );
-        const hst = netCommission * (0.13 / 1.15);
+        const hst = netCommission * (0.13 / 1.13);
 
         // Calculate additional fields
         const awardAmount = parseFloat(agentCommission?.awardAmount || 0);
         const commission = parseFloat(agentCommission?.amount || 0);
         const officeShare = feesDeducted;
-        const calculatedHST = (netCommission / 115) * 15;
+        const calculatedHST = (netCommission / 113) * 13;
 
         // Add to agent summary
         agentSummary[agentId].totalTrades += 1;

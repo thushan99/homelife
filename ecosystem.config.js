@@ -18,7 +18,13 @@ module.exports = {
         MONGO_URI:
           "mongodb+srv://sri:Bestway2025@homelife.qqqjxz.mongodb.net/homelife?retryWrites=true&w=majority&appName=Homelife",
         DOMAIN: "homelife.brokeragelead.ca",
-        // API_DOMAIN: "api.brokeragelead.ca",
+         JWT_SECRET: "ade87249cbffe4b686d3813db4639185d85862c560d9c12cbde8a6d31ba954ea052dc724a355c79bb3981032d895fdfe437ab1589e0ba4774e624c53cbd2743a",
+        EMAIL_SERVICE: "mailwire",
+        EMAIL_HOST: "cloud1.mailwire.com",
+        EMAIL_PORT: 465,
+        EMAIL_SECURE: true,
+        EMAIL_USER: "admin@brokercore.co",
+        EMAIL_PASSWORD: "Toronto9889&"
       },
       error_file: "../logs/backend-err.log",
       out_file: "../logs/backend-out.log",

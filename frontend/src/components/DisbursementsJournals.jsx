@@ -473,8 +473,8 @@ const DisbursementsJournals = () => {
         </head>
         <body>
           <div class="header">
-            <img src="/logo1.jpg" alt="Company Logo" class="company-logo" />
-            <div class="company-name">SAVEMAX 365 REALTY, BROKERAGE</div>
+            <img src="/logo.jpeg" alt="Company Logo" class="company-logo" />
+            <div class="company-name">Homelife Top Star Realty Inc., Brokerage</div>
             <div class="report-title">${
               activeSection === "general-account"
                 ? "AR & Disbursements Journal"

@@ -293,7 +293,7 @@ router.post("/send-invoice-pdf", async (req, res) => {
         </head>
         <body>
           <div class="header">
-            <img src="https://res.cloudinary.com/dyv1yieeq/image/upload/v1759428862/logo_tonzim.jpg" alt="Homelife Top Star Realty Inc. Logo" style="width: 120px; margin-bottom: 10px;" />
+            <img src="https://res.cloudinary.com/dyv1yieeq/image/upload/logo_xv8gux.jpg" alt="Homelife Top Star Realty Inc. Logo" style="width: 120px; margin-bottom: 10px;" />
             <div class="company-title">Homelife Top Star Realty Inc., Brokerage</div>
             <div class="company-address">9889 Markham Road, Suite 201, Markham, Ontario L6E OB7</div>
             <div>Office: 905-209-1400 | Fax: 905-209-1403</div>
@@ -415,7 +415,7 @@ router.post("/send-invoice-pdf", async (req, res) => {
         </head>
         <body>
           <div class="header">
-            <img src="https://res.cloudinary.com/dyv1yieeq/image/upload/v1759428862/logo_tonzim.jpg" alt="Homelife Top Star Realty Inc. Logo" style="width: 120px; margin-bottom: 10px;" />
+            <img src="https://res.cloudinary.com/dyv1yieeq/image/upload/logo_xv8gux.jpg" alt="Homelife Top Star Realty Inc. Logo" style="width: 120px; margin-bottom: 10px;" />
             <div style="font-size: 20px; font-weight: bold; margin-top: 8px;">Homelife Top Star Realty Inc., Brokerage</div>
             <div>9889 Markham Road, Suite 201<br/>Markham, Ontario L6E OB7</div>
             <div>Phone: 905-209-1400 &nbsp; Fax: 905-209-1403</div>
@@ -472,7 +472,7 @@ router.post("/send-invoice-pdf", async (req, res) => {
             <b>Account:</b> 520-6067<br/>
           </div>
           <div class="footer">
-            Please feel free to contact our Deals department should you require more information/clarification. 506-268-2900. Or E-mail adminnb@bestwayrealtyinc.com.<br/><br/>
+            Please feel free to contact our Deals department should you require more information/clarification. 905-209-1400. Or E-mail administrator@homelifetopstar.com .<br/><br/>
             Sincerely,<br/>
             Daphney Roy<br/>
             Administrator
@@ -523,13 +523,14 @@ Amount Due: $${Number(
         maximumFractionDigits: 2,
       })}
 
-If you have any questions, please don't hesitate to contact us at 506-268-2900 or adminnb@bestwayrealtyinc.com.
+If you have any questions, please don't hesitate to contact us at 905-209-1400 or administrator@homelifetopstar.com .
 
 Best regards,
 Homelife Top Star Realty Inc., Brokerage
 9889 Markham Road, Suite 201
 Markham, Ontario L6E OB7
-Phone: 506-268-2900
+Phone: 905-209-1400
+
 
 Please confirm receipt of this email. 
 Please Don't reply to this email.
@@ -552,13 +553,14 @@ Amount Due: $${Number(invoiceData.total || 0).toLocaleString(undefined, {
         maximumFractionDigits: 2,
       })}
 
-If you have any questions, please don't hesitate to contact us at 506-268-2900 or adminnb@bestwayrealtyinc.com.
+If you have any questions, please don't hesitate to contact us at 905-209-1403 or administrator@homelifetopstar.com .
 
 Best regards,
 Homelife Top Star Realty Inc., Brokerage
 9889 Markham Road, Suite 201
 Markham, Ontario L6E OB7
-Phone: 506-268-2900
+Phone: 905-209-1403
+
 
 Please confirm receipt of this email. Please
 Don't reply to the sender email.

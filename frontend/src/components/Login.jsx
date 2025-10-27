@@ -6,7 +6,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
-import companyLogo from "../Assets/logo1.jpg";
+import companyLogo from "../Assets/logo.jpeg";
 
 const Login = ({ setUser }) => {
   const [email, setEmail] = useState("");

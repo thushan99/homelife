@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import { FaArrowLeft, FaPrint } from "react-icons/fa";
 import axiosInstance from "../config/axios";
-import logo from "../Assets/logo1.jpg";
+import logo from "../Assets/logo.jpeg";
 
 const COMPANY_NAME = "Homelife Top Star Realty  Inc., Brokerage";
 const ACCOUNTS_TABLE1 = ["23000", "23001"];

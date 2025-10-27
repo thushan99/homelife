@@ -101,7 +101,7 @@ const FinancialReportsAgentPayment = () => {
               baseFee = parseFloat(eft.amount) * 0.05; // 5% of net commission
               break;
             case "plan8515":
-              baseFee = parseFloat(eft.amount) * 0.13; // 13% of net commission
+              baseFee = parseFloat(eft.amount) * 0.15; // 13% of net commission
               break;
             case "plan5050":
               baseFee = parseFloat(eft.amount) * 0.5; // 50% of net commission
@@ -205,7 +205,7 @@ const FinancialReportsAgentPayment = () => {
     );
 
     const totalHST = filteredData.reduce(
-      (sum, item) => sum + parseFloat(item.netCommission || 0) * (0.13 / 1.15),
+      (sum, item) => sum + parseFloat(item.netCommission || 0) * (0.13 / 1.13),
       0
     );
 
@@ -332,7 +332,7 @@ const FinancialReportsAgentPayment = () => {
                     item.netCommission
                   )}</td>
                   <td class="red-text">${formatCurrency(
-                    parseFloat(item.netCommission || 0) * (0.13 / 1.15)
+                    parseFloat(item.netCommission || 0) * (0.13 / 1.13)
                   )}</td>
                 </tr>
               `
@@ -502,7 +502,7 @@ const FinancialReportsAgentPayment = () => {
                             {formatCurrency(
                               (
                                 parseFloat(item.netCommission || 0) *
-                                (0.13 / 1.15)
+                                (0.13 / 1.13)
                               ).toFixed(2)
                             )}
                           </td>
@@ -550,7 +550,7 @@ const FinancialReportsAgentPayment = () => {
                         eftData.reduce(
                           (sum, item) =>
                             sum +
-                            parseFloat(item.netCommission || 0) * (0.13 / 1.15),
+                            parseFloat(item.netCommission || 0) * (0.13 / 1.13),
                           0
                         )
                       )}
@@ -571,7 +571,7 @@ const FinancialReportsAgentPayment = () => {
                             (sum, item) =>
                               sum +
                               parseFloat(item.netCommission || 0) *
-                                (0.13 / 1.15),
+                                (0.13 / 1.13),
                             0
                           )
                       )}
