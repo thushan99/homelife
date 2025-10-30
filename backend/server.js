@@ -84,8 +84,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json({ limit: "10mb" })); // Add size limit
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: "50mb" })); // Increased limit for large PDF uploads
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 // Request logging middleware
 app.use((req, res, next) => {
@@ -205,6 +205,7 @@ const reconciliationSettingsRoutes = require("./routes/reconciliationSettings");
 const outsideBrokerRoutes = require("./routes/outsideBroker");
 const lawyerRoutes = require("./routes/lawyer");
 const emailRoutes = require('./routes/email'); // Add email router
+const dropboxRoutes = require('./routes/dropbox'); // Add Dropbox router
 
 // API Routes Registration
 app.use("/api/reminders", reminderRoutes);
@@ -228,6 +229,7 @@ app.use("/api/reconciliation-settings", reconciliationSettingsRoutes);
 app.use("/api/outside-brokers", outsideBrokerRoutes);
 app.use("/api/lawyers", lawyerRoutes);
 app.use('/api/email', emailRoutes); // Use email router
+app.use('/api/dropbox', dropboxRoutes); // Use Dropbox router
 
 // Test endpoint
 app.get("/api/test-listing-route/:number", async (req, res) => {
