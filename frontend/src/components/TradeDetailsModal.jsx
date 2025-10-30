@@ -482,12 +482,6 @@ const TradeDetailsModal = ({ trade, onClose, onUpdate }) => {
 
 
 
-          // Calculate agent commission as Amount - Fees Deducted
-
-          const agentCommission = agentAmount - agentFeesDeducted;
-
-
-
           // Get buyer rebate amount for this agent
 
           const buyerRebateAmount =
@@ -497,6 +491,18 @@ const TradeDetailsModal = ({ trade, onClose, onUpdate }) => {
               ? parseFloat(agent.buyerRebateAmount) || 0
 
               : 0;
+
+
+
+          // IMPORTANT: agent.amount is stored AFTER buyer rebate has been deducted
+
+          // To get the commission BEFORE rebate for HST calculation, we add the rebate back
+
+          const agentCommissionAfterRebate = agentAmount - agentFeesDeducted;
+
+          const agentCommissionBeforeRebate =
+
+            agentCommissionAfterRebate + buyerRebateAmount;
 
 
 
@@ -510,21 +516,29 @@ const TradeDetailsModal = ({ trade, onClose, onUpdate }) => {
 
           // Use trade classification to determine which column the agent amount goes in
 
+          // IMPORTANT: When buyer rebate exists:
+
+          // - Agent commission shown = stored amount (AFTER rebate deduction) = $13,541.25
+
+          // - HST is calculated on commission BEFORE rebate = stored amount + rebate = $21,541.25
+
+          // - Buyer rebate shown separately in Liabilities section
+
           if (isCoOperatingSide) {
 
             // For CO-OPERATING SIDE: put agent amount in selling column
 
             agentListing = "0.00";
 
-            // Apply buyer rebate deduction to selling amount
+            // Show agent commission as stored (after rebate deduction)
 
-            agentSelling = (agentCommission - buyerRebateAmount).toFixed(2);
+            agentSelling = agentCommissionAfterRebate.toFixed(2);
 
           } else {
 
             // For LISTING SIDE: put agent amount in listing column
 
-            agentListing = (agentCommission - buyerRebateAmount).toFixed(2);
+            agentListing = agentCommissionAfterRebate.toFixed(2);
 
             agentSelling = "0.00";
 
@@ -542,9 +556,11 @@ const TradeDetailsModal = ({ trade, onClose, onUpdate }) => {
 
 
 
-          // HST is calculated on the original commission amount (before buyer rebate deduction)
+          // HST is calculated on the FULL commission amount BEFORE buyer rebate deduction
 
-          const agentHST = (agentCommission * 0.13).toFixed(2);
+          const agentHST = (agentCommissionBeforeRebate * 0.13).toFixed(2);
+
+          // Total = Commission (after rebate) + HST (calculated on commission before rebate)
 
           const agentTotal = (
 
@@ -1976,7 +1992,15 @@ const TradeDetailsModal = ({ trade, onClose, onUpdate }) => {
 
                   <td style="border:1px solid #ddd; padding:4px;">${formatCurrency(
 
-                    agent.amount || 0
+                    agent.buyerRebateIncluded === "yes" &&
+
+                      agent.buyerRebateAmount
+
+                      ? parseFloat(agent.amount || 0) +
+
+                          parseFloat(agent.buyerRebateAmount || 0)
+
+                      : parseFloat(agent.amount || 0)
 
                   )}</td>
 
@@ -1998,21 +2022,13 @@ const TradeDetailsModal = ({ trade, onClose, onUpdate }) => {
 
                   }</td>
 
-                  <td style="border:1px solid #ddd; padding:4px;">${formatCurrency(
+                            <td style="border:1px solid #ddd; padding:4px;">${formatCurrency(
 
                     parseFloat(agent.amount || 0) -
 
-                      parseFloat(agent.feesDeducted || 0) -
+                      parseFloat(agent.feesDeducted || 0)
 
-                      (agent.buyerRebateIncluded === "yes" &&
-
-                      agent.buyerRebateAmount
-
-                        ? parseFloat(agent.buyerRebateAmount || 0)
-
-                        : 0)
-
-                  )}</td>
+                  )}</td> // This is the total commission after fees deducted and buyer rebate included
 
                 </tr>
 
