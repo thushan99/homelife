@@ -147,23 +147,17 @@ router.post('/upload-pdf', async (req, res) => {
 // Get OAuth URL for user authentication
 router.get('/auth-url', (req, res) => {
   try {
-    // Determine redirect URI based on the request origin
-    const origin = req.get('origin') || req.get('referer');
-    let redirectUri = getRedirectUri(origin);
-    
-    // Allow override from query parameter
-    if (req.query.redirectUri) {
-      redirectUri = req.query.redirectUri;
-    }
+    // Always use production URL for redirect
+    const FRONTEND_URL = process.env.FRONTEND_URL || 'https://homelife.brokeragelead.ca';
+    const redirectUri = `${FRONTEND_URL}/dropbox-callback`;
     
     console.log('🔍 Dropbox Auth Request:');
-    console.log('  - Origin:', origin || 'none');
     console.log('  - Redirect URI:', redirectUri);
     console.log('  - App Key:', DROPBOX_APP_KEY);
+    console.log('  - Full Auth URL: https://www.dropbox.com/oauth2/authorize?client_id=' + DROPBOX_APP_KEY);
     
     const authUrl = `https://www.dropbox.com/oauth2/authorize?client_id=${DROPBOX_APP_KEY}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&token_access_type=offline`;
 
-    console.log('  - Full Auth URL:', authUrl);
     console.log('⚠️  Make sure this URI is in Dropbox Console:', redirectUri);
     
     res.json({
@@ -177,6 +171,78 @@ router.get('/auth-url', (req, res) => {
       success: false,
       message: 'Failed to generate authentication URL'
     });
+  }
+});
+
+// OAuth callback handler - receives code from Dropbox and redirects to frontend
+router.get('/callback', async (req, res) => {
+  try {
+    const { code, error, error_description } = req.query;
+
+    // Check if user denied access
+    if (error) {
+      console.error('❌ Dropbox OAuth error:', error, error_description);
+      const FRONTEND_URL = process.env.FRONTEND_URL || 'https://homelife.brokeragelead.ca';
+      return res.redirect(`${FRONTEND_URL}/settings?dropbox_error=${encodeURIComponent(error_description || error)}`);
+    }
+
+    if (!code) {
+      console.error('❌ No authorization code received');
+      const FRONTEND_URL = process.env.FRONTEND_URL || 'https://homelife.brokeragelead.ca';
+      return res.redirect(`${FRONTEND_URL}/settings?dropbox_error=no_code`);
+    }
+
+    console.log('✅ Dropbox OAuth callback received with code');
+    console.log('  - Code:', code.substring(0, 20) + '...');
+
+    // Determine the redirect URI that was used
+    const origin = req.get('referer') || '';
+    let redirectUri = getRedirectUri(origin);
+    
+    // For production, always use the FRONTEND_URL
+    const FRONTEND_URL = process.env.FRONTEND_URL || 'https://homelife.brokeragelead.ca';
+    redirectUri = `${FRONTEND_URL}/dropbox-callback`;
+
+    console.log('  - Using redirect URI:', redirectUri);
+
+    // Exchange code for access token
+    const tokenUrl = 'https://api.dropboxapi.com/oauth2/token';
+    const params = new URLSearchParams();
+    params.append('code', code);
+    params.append('grant_type', 'authorization_code');
+    params.append('client_id', DROPBOX_APP_KEY);
+    params.append('client_secret', DROPBOX_APP_SECRET);
+    params.append('redirect_uri', redirectUri);
+
+    const response = await fetch(tokenUrl, {
+      method: 'POST',
+      body: params,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('❌ Token exchange failed:', data);
+      throw new Error(data.error_description || 'Failed to exchange token');
+    }
+
+    console.log('✅ Token exchange successful');
+    console.log('  - Access token received');
+    console.log('  - Has refresh token:', !!data.refresh_token);
+    console.log('  - Expires in:', data.expires_in, 'seconds');
+
+    // Redirect to frontend with tokens in URL parameters (will be immediately stored in localStorage)
+    const successUrl = `${FRONTEND_URL}/settings?dropbox_success=true&access_token=${encodeURIComponent(data.access_token)}&refresh_token=${encodeURIComponent(data.refresh_token || '')}&expires_in=${data.expires_in}`;
+    
+    res.redirect(successUrl);
+
+  } catch (error) {
+    console.error('❌ Error in OAuth callback:', error);
+    const FRONTEND_URL = process.env.FRONTEND_URL || 'https://homelife.brokeragelead.ca';
+    res.redirect(`${FRONTEND_URL}/settings?dropbox_error=${encodeURIComponent(error.message || 'authentication_failed')}`);
   }
 });
 

@@ -231,6 +231,13 @@ app.use("/api/lawyers", lawyerRoutes);
 app.use('/api/email', emailRoutes); // Use email router
 app.use('/api/dropbox', dropboxRoutes); // Use Dropbox router
 
+// Dropbox OAuth callback route (at root level to match redirect URI)
+app.get('/dropbox-callback', (req, res, next) => {
+  // Forward to the dropbox router's callback handler
+  req.url = '/callback';
+  dropboxRoutes(req, res, next);
+});
+
 // Test endpoint
 app.get("/api/test-listing-route/:number", async (req, res) => {
   try {

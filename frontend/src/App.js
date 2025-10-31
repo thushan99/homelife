@@ -66,6 +66,7 @@ import FinancialReportsAgentPayment from "./components/FinancialReportsAgentsPay
 import AgentPaymentSummary from "./components/AgentPaymentSummary";
 import OutsideBrokersDB from "./components/OutsideBrokersDB";
 import LawyersDB from "./components/LawyersDB";
+import DropboxCallback from "./pages/DropboxCallback";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -354,6 +355,10 @@ function App() {
           <Route
             path="/lawyers-db"
             element={user ? <LawyersDB /> : <Navigate to="/" replace />}
+          />
+          <Route
+            path="/dropbox-callback"
+            element={<DropboxCallback />}
           />
         </Routes>
       </Router>
