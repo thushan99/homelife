@@ -57,15 +57,19 @@ const DropboxCallback = () => {
             setStatus('success');
             setMessage('Dropbox connected successfully! Redirecting...');
 
-            // Check for pending upload
+            // Check for pending upload and redirect URL
             const pendingTradeId = localStorage.getItem('pendingDropboxUploadTradeId');
+            const redirectUrl = localStorage.getItem('dropboxRedirectUrl') || '/transactions';
             
             setTimeout(() => {
               if (pendingTradeId) {
                 console.log('📤 Pending upload detected for trade:', pendingTradeId);
                 localStorage.removeItem('pendingDropboxUploadTradeId');
               }
-              navigate('/transactions', { 
+              console.log('🔄 Redirecting back to:', redirectUrl);
+              localStorage.removeItem('dropboxRedirectUrl');
+              
+              navigate(redirectUrl, { 
                 replace: true,
                 state: { dropboxConnected: true, pendingTradeId }
               });
@@ -76,8 +80,12 @@ const DropboxCallback = () => {
           console.error('❌ Token exchange failed:', error);
           setStatus('error');
           setMessage(`Failed to exchange token: ${error.response?.data?.message || error.message}`);
+          
+          const redirectUrl = localStorage.getItem('dropboxRedirectUrl') || '/transactions';
+          localStorage.removeItem('dropboxRedirectUrl');
+          
           setTimeout(() => {
-            navigate('/transactions', { replace: true });
+            navigate(redirectUrl, { replace: true });
           }, 3000);
           return;
         }
@@ -99,11 +107,15 @@ const DropboxCallback = () => {
         setMessage('Dropbox connected successfully! Redirecting...');
 
         const pendingTradeId = localStorage.getItem('pendingDropboxUploadTradeId');
+        const redirectUrl = localStorage.getItem('dropboxRedirectUrl') || '/transactions';
+        
         setTimeout(() => {
           if (pendingTradeId) {
             localStorage.removeItem('pendingDropboxUploadTradeId');
           }
-          navigate('/transactions', { 
+          localStorage.removeItem('dropboxRedirectUrl');
+          
+          navigate(redirectUrl, { 
             replace: true,
             state: { dropboxConnected: true, pendingTradeId }
           });
@@ -116,16 +128,22 @@ const DropboxCallback = () => {
         setStatus('error');
         setMessage(`Authentication failed: ${decodeURIComponent(error)}`);
         console.error('❌ Dropbox authentication failed:', error);
+        
+        const redirectUrl = localStorage.getItem('dropboxRedirectUrl') || '/transactions';
+        localStorage.removeItem('dropboxRedirectUrl');
+        
         setTimeout(() => {
-          navigate('/transactions', { replace: true });
+          navigate(redirectUrl, { replace: true });
         }, 3000);
         return;
       }
 
       // Case 4: No relevant parameters - user navigated here directly
       if (!code && !success && !error && !accessToken) {
-        console.log('⚠️ No callback parameters found - redirecting to transactions');
-        navigate('/transactions', { replace: true });
+        console.log('⚠️ No callback parameters found - redirecting back');
+        const redirectUrl = localStorage.getItem('dropboxRedirectUrl') || '/transactions';
+        localStorage.removeItem('dropboxRedirectUrl');
+        navigate(redirectUrl, { replace: true });
         return;
       }
 
@@ -133,8 +151,12 @@ const DropboxCallback = () => {
       setStatus('error');
       setMessage('Unexpected authentication response. Please try again.');
       console.error('❌ Unexpected callback state');
+      
+      const redirectUrl = localStorage.getItem('dropboxRedirectUrl') || '/transactions';
+      localStorage.removeItem('dropboxRedirectUrl');
+      
       setTimeout(() => {
-        navigate('/transactions', { replace: true });
+        navigate(redirectUrl, { replace: true });
       }, 3000);
     };
 

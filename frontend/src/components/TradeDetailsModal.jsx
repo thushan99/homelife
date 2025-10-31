@@ -1963,8 +1963,9 @@ const TradeDetailsModal = ({ trade, onClose, onUpdate }) => {
       console.log("  ", response.data.redirectUri || redirectUri);
 
       if (response.data.success) {
-        // Store current trade ID for callback
+        // Store current trade ID and page URL for callback
         localStorage.setItem("pendingDropboxUploadTradeId", trade._id);
+        localStorage.setItem("dropboxRedirectUrl", window.location.pathname);
 
         // Show alert with instructions before redirecting
         alert(

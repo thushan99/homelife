@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaSearch } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Select from "react-select";
 import CommissionForm from "./CommissionForm";
@@ -14,6 +15,7 @@ import { toast } from "react-toastify";
 import axiosInstance from "../config/axios";
 
 const TradeInfo = ({ user }) => {
+  const location = useLocation();
   const [activeTab, setActiveTab] = useState("list");
   const [trades, setTrades] = useState([]);
   const [isLoadingTrades, setIsLoadingTrades] = useState(true);
@@ -91,6 +93,25 @@ const TradeInfo = ({ user }) => {
 
     fetchTrades();
   }, []);
+
+  // Handle Dropbox callback - reopen modal after authentication
+  useEffect(() => {
+    if (location.state?.dropboxConnected && location.state?.pendingTradeId) {
+      console.log('🔄 Dropbox connected! Reopening modal for trade:', location.state.pendingTradeId);
+      
+      // Find the trade by ID
+      const trade = trades.find(t => t._id === location.state.pendingTradeId);
+      
+      if (trade) {
+        setSelectedTrade(trade);
+        setShowTradeModal(true);
+        toast.success('Dropbox connected successfully! You can now upload PDFs.');
+      }
+      
+      // Clear the state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state, trades]);
 
   const TradeList = () => {
     const handleTradeRowClick = async (trade) => {
