@@ -3,8 +3,8 @@ const router = express.Router();
 const { Dropbox } = require('dropbox');
 
 // Dropbox configuration from environment variables
-const DROPBOX_APP_KEY = process.env.DROPBOX_APP_KEY || '5y0cw6jomnp7s7k';
-const DROPBOX_APP_SECRET = process.env.DROPBOX_APP_SECRET || 'je3j0rix9rx9bzs';
+const DROPBOX_APP_KEY = process.env.DROPBOX_APP_KEY || 'hkxnvciw8hwlxob';
+const DROPBOX_APP_SECRET = process.env.DROPBOX_APP_SECRET || '7gpormhtp0s3c4b';
 
 // Validate Dropbox credentials
 if (!DROPBOX_APP_KEY || !DROPBOX_APP_SECRET) {
@@ -14,9 +14,9 @@ if (!DROPBOX_APP_KEY || !DROPBOX_APP_SECRET) {
 
 // Helper function to get redirect URI based on origin
 const getRedirectUri = (origin) => {
-  const FRONTEND_URL = process.env.FRONTEND_URL || 'http://homelife.brokeragelead.ca';
+  const FRONTEND_URL = process.env.FRONTEND_URL || 'https://homelife.brokeragelead.ca';
   const FRONTEND_URL_LOCAL = process.env.FRONTEND_URL_LOCAL || 'http://localhost:3000';
-  const FRONTEND_URL_IP = process.env.FRONTEND_URL_IP || 'http://107.161.34.44:8001';
+  const FRONTEND_URL_IP = process.env.FRONTEND_URL_IP || 'https://107.161.34.44:8001';
   
   if (!origin || origin === 'none') {
     return `${FRONTEND_URL_LOCAL}/dropbox-callback`;
