@@ -23,6 +23,14 @@ const DropboxCallback = () => {
       console.log('  - Error:', error);
       console.log('  - Has Access Token:', !!accessToken);
       console.log('  - Has Refresh Token:', !!refreshToken);
+      console.log('  - URL:', location.pathname + location.search);
+
+      // If no parameters, user navigated here directly - just redirect
+      if (!success && !error && !accessToken) {
+        console.log('⚠️ No callback parameters found - redirecting to transactions');
+        navigate('/transactions', { replace: true });
+        return;
+      }
 
       if (error) {
         // Authentication failed
@@ -69,10 +77,10 @@ const DropboxCallback = () => {
           });
         }, 2000);
       } else {
-        // Unexpected state
+        // Unexpected state - has some params but not the right ones
         setStatus('error');
         setMessage('Unexpected authentication response. Please try again.');
-        console.error('❌ Unexpected callback state');
+        console.error('❌ Unexpected callback state - params present but invalid');
         
         setTimeout(() => {
           navigate('/transactions', { replace: true });

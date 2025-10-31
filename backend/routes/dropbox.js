@@ -183,13 +183,13 @@ router.get('/callback', async (req, res) => {
     if (error) {
       console.error('❌ Dropbox OAuth error:', error, error_description);
       const FRONTEND_URL = process.env.FRONTEND_URL || 'https://homelife.brokeragelead.ca';
-      return res.redirect(`${FRONTEND_URL}/settings?dropbox_error=${encodeURIComponent(error_description || error)}`);
+      return res.redirect(`${FRONTEND_URL}/dropbox-callback?dropbox_error=${encodeURIComponent(error_description || error)}`);
     }
 
     if (!code) {
       console.error('❌ No authorization code received');
       const FRONTEND_URL = process.env.FRONTEND_URL || 'https://homelife.brokeragelead.ca';
-      return res.redirect(`${FRONTEND_URL}/settings?dropbox_error=no_code`);
+      return res.redirect(`${FRONTEND_URL}/dropbox-callback?dropbox_error=no_code`);
     }
 
     console.log('✅ Dropbox OAuth callback received with code');
@@ -234,15 +234,16 @@ router.get('/callback', async (req, res) => {
     console.log('  - Has refresh token:', !!data.refresh_token);
     console.log('  - Expires in:', data.expires_in, 'seconds');
 
-    // Redirect to frontend with tokens in URL parameters (will be immediately stored in localStorage)
-    const successUrl = `${FRONTEND_URL}/settings?dropbox_success=true&access_token=${encodeURIComponent(data.access_token)}&refresh_token=${encodeURIComponent(data.refresh_token || '')}&expires_in=${data.expires_in}`;
+    // Redirect to frontend dropbox-callback page with tokens in URL parameters
+    const successUrl = `${FRONTEND_URL}/dropbox-callback?dropbox_success=true&access_token=${encodeURIComponent(data.access_token)}&refresh_token=${encodeURIComponent(data.refresh_token || '')}&expires_in=${data.expires_in}`;
     
+    console.log('  - Redirecting to:', successUrl.split('?')[0] + '?...');
     res.redirect(successUrl);
 
   } catch (error) {
     console.error('❌ Error in OAuth callback:', error);
     const FRONTEND_URL = process.env.FRONTEND_URL || 'https://homelife.brokeragelead.ca';
-    res.redirect(`${FRONTEND_URL}/settings?dropbox_error=${encodeURIComponent(error.message || 'authentication_failed')}`);
+    res.redirect(`${FRONTEND_URL}/dropbox-callback?dropbox_error=${encodeURIComponent(error.message || 'authentication_failed')}`);
   }
 });
 
